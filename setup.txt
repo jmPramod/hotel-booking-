@@ -1,0 +1,3 @@
+npm i --save-dev typescript @types/express @types/node
+> npx tsc --init
+npm install -g ts-node

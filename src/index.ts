@@ -1,12 +1,11 @@
-import express from "express"
 
-const app=express()
+import dotenv from "dotenv"
+import { app, runServer } from "./app"
+dotenv.config()
+const Port=process.env.PORT
 
-app.get("/",(req,res)=>{
-
-    res.send("hai")
-})
-app.listen(5300,()=>{
-    console.log("server is running ");
+runServer()
+app.listen(Port,()=>{
+    console.log(`server is running http://localhost:${Port} `);
     
 })

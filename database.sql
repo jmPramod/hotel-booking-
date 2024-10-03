@@ -3,7 +3,7 @@ CREATE TABLE users (
     user_name VARCHAR(100),
     user_secondName VARCHAR(100),
     user_email VARCHAR(255) UNIQUE,
-    user_phone BIGINT,
+    user_phone  VARCHAR(15) UNIQUE,
     user_password VARCHAR(255),
     user_role VARCHAR(50),
     cloudinaryPublicId VARCHAR(255),

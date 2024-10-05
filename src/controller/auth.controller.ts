@@ -80,8 +80,8 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await pool.query(
-      `SELECT * FROM users WHERE user_email = $1`,
-      [req.body.user_email]
+      `SELECT * FROM users WHERE user_email = $1 OR user_phone = $2`,
+      [req.body.user_email || null, req.body.user_email || null]
     );
     if (result.rows.length === 0) {
       return next(createError(404, "This email does not exist"));

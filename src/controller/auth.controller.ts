@@ -4,6 +4,10 @@ import { registerValidation } from "../validations/auth.validation";
 import createError from "../middlewear/error.middlewear";
 import { ValidationError } from "joi";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+import dotenv from "dotenv";
+dotenv.config();
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { error }: { error?: ValidationError } = registerValidation.validate(
@@ -57,10 +61,14 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         user_pinCode,
       ]
     );
-
+    const token = jwt.sign(
+      { email: user_email, id: result.rows[0].id },
+      process.env.SECRET_KEY as string
+    );
     return res.status(201).json({
       message: "User created successfully",
       data: result.rows[0],
+      token: token,
     });
   } catch (error: any) {
     console.log(error);
@@ -69,4 +77,38 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { register };
+const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM users WHERE user_email = $1`,
+      [req.body.user_email]
+    );
+    if (result.rows.length === 0) {
+      return next(createError(404, "This email does not exist"));
+    }
+    if (!req.body.user_password) {
+      return next(createError(404, "Password is missing."));
+    }
+    const decryptPassword = await bcrypt.compare(
+      req.body.user_password,
+      result.rows[0].user_password
+    );
+
+    if (!decryptPassword) {
+      return next(createError(404, "Password is incorrect"));
+    }
+    const token = jwt.sign(
+      { email: req.body.user_email, id: result.rows[0].id },
+      process.env.SECRET_KEY as string
+    );
+
+    return res.status(201).json({
+      message: "User Logged in  successfully",
+      data: result.rows[0],
+      token: token,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export { register, login };

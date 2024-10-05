@@ -10,8 +10,6 @@ export const ErrorHandelingMiddlewear = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("pj");
-
   const status = err.status || 500;
   const errorMessage = err.message || "Something went wrong!!!!";
 

@@ -1,13 +1,10 @@
+import dotenv from "dotenv";
+import { app, runServer } from "./app";
+dotenv.config();
+const Port = process.env.PORT;
 
-import dotenv from "dotenv"
-import { app, runServer } from "./app"
-dotenv.config()
-const Port=process.env.PORT
+runServer();
 
-runServer()
-
-
-app.listen(Port,()=>{
-    console.log(`server is running http://localhost:${Port} `);
-    
-})
+app.listen(Port, () => {
+  console.log(`server is running http://localhost:${Port} `);
+});

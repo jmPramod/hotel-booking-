@@ -10,6 +10,7 @@ import swaggerUI from "swagger-ui-express";
 
 import * as swaggerDocument from "../src/config/swagger.json";
 dotenv.config();
+
 const app = express();
 const runServer = () => {
   //!middlewear
@@ -22,7 +23,6 @@ const runServer = () => {
   app.use("/", authRoute);
   app.use(ErrorHandelingMiddlewear);
   connectDataBase();
-  0;
 };
 
 export { runServer, app };
